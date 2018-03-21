@@ -3,6 +3,7 @@ From:centos:7
 
 %labels
 MAINTAINER baber@iastate.edu
+spack
 
 %environment
 SPACK_ROOT=/opt/spack
