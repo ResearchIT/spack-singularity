@@ -5,6 +5,7 @@ From:ResearchIT/spack-singularity:spack
 MAINTAINER baber@iastate.edu
 
 %environment
+source /etc/profile.d/modules.sh
 module load openmpi
 
 %post
