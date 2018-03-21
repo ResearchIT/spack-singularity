@@ -14,7 +14,7 @@ export PATH=$SPACK_ROOT/bin:$PATH
 
 source $SPACK_ROOT/share/spack/setup-env.sh
 
-spack install openmpi fabrics=pmi schedulers=slurm
+spack install openmpi schedulers=slurm
 
 %runscript
 exec run_BUSCO.py "$@"
