@@ -37,7 +37,7 @@ spack compiler find --scope system $(which gfortran)
 #setup modules config file
 echo "modules:" >> /opt/spack/etc/spack/modules.yaml
 echo "  tcl:" >> /opt/spack/etc/spack/modules.yaml
-echo "    naming_scheme: '${PACKAGE}/${VERSION}'" >> /opt/spack/etc/spack/modules.yaml
+echo "    naming_scheme: '\${PACKAGE}/\${VERSION}'" >> /opt/spack/etc/spack/modules.yaml
 
 source $SPACK_ROOT/share/spack/setup-env.sh
 
