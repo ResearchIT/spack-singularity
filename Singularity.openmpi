@@ -18,5 +18,5 @@ source $SPACK_ROOT/share/spack/setup-env.sh
 spack install openmpi schedulers=slurm
 
 %runscript
-exec run_BUSCO.py "$@"
+exec mpirun "$@"
 
