@@ -1,0 +1,32 @@
+Bootstrap:shub
+From:ResearchIT/spack-singularity:openmpi
+
+%labels
+MAINTAINER baber@iastate.edu
+
+%environment
+source /etc/profile.d/modules.sh
+module load busco
+
+%post
+export SPACK_ROOT=/opt/spack
+export SPACK_ROOT
+export PATH=$SPACK_ROOT/bin:$PATH
+
+yum -y install bc paste
+yum clean all
+
+source $SPACK_ROOT/share/spack/setup-env.sh
+spack install busco@3.0.1
+
+#busco config
+export BUSCODIR=$(spack location -i busco)
+cp $BUSCODIR/config/config.ini.default $BUSCODIR/config/config.ini
+grep --line-number '[tblastn]' config.ini | cut -d ':' -f 1 | (tail -n 1 && echo 2) | paste -sd+ - | bc | xargs -I linenum sed "linenums|.*|$(spack location -i blast-plus)/bin|g" config.ini
+grep --line-number '[makeblastdb]' config.ini | cut -d ':' -f 1 | (tail -n 1 && echo 2) | paste -sd+ - | bc | xargs -I linenum sed "linenums|.*|$(spack location -i blast-plus)/bin|g" config.ini
+sed -i 's|/home/osboxes/BUSCOVM/augustus/augustus-3.2.2/bin/|$(spack location -i augustus)/bin|g' $BUSCODIR/config/config.ini
+sed -i 's|/home/osboxes/BUSCOVM/augustus/augustus-3.2.2/scripts/|$(spack location -i augustus)/scripts|g' $BUSCODIR/config/config.ini
+sed -i 's|/home/osboxes/BUSCOVM/hmmer/hmmer-3.1b2-linux-intel-ia32/binaries/|$(spack location -i hmmer)/bin|g' $BUSCODIR/config/config.ini
+
+%runscript
+exec run_BUSCO.py "$@"
