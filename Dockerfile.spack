@@ -1,0 +1,27 @@
+FROM centos:7
+
+RUN export SPACK_ROOT=/opt/spack
+RUN export PATH=$SPACK_ROOT/bin:$PATH
+
+RUN yum -y install git python \
+gcc gcc-c++ gcc-gfortran curl \
+gnupg2 sed patch \
+unzip gzip bzip2 \
+findutils make vim \
+environment-modules
+
+#get spack
+RUN git clone https://github.com/spack/spack.git /opt/spack
+
+#setup compilers.yaml
+RUN source /opt/spack/share/spack/setup-env.sh
+RUN /opt/spack/bin/spack compiler find --scope system $(which gcc)
+RUN /opt/spack/bin/spack compiler find --scope system $(which g++)
+RUN /opt/spack/bin/spack compiler find --scope system $(which gfortran)
+
+#setup modules config file
+RUN echo "modules:" >> /opt/spack/etc/spack/modules.yaml
+RUN echo "  tcl:" >> /opt/spack/etc/spack/modules.yaml
+RUN echo "    naming_scheme: '\${PACKAGE}/\${VERSION}'" >> /opt/spack/etc/spack/modules.yaml
+
+CMD ['/opt/spack/bin/spack', 'help']
